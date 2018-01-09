@@ -35,6 +35,7 @@ namespace ConsoleApp1
             HttpListenerRequest request = context.Request;
             // Obtain a response object.
             HttpListenerResponse response = context.Response;
+            response.ContentType = "text/html";
             // Construct a response.
             string responseString = "<HTML><BODY> Hello world!</BODY></HTML>";
             byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
@@ -45,6 +46,7 @@ namespace ConsoleApp1
             // You must close the output stream.
             output.Close();
             listener.Stop();
+            
         }
     }
 }

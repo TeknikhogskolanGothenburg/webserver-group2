@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace ConsoleApp1
 {
@@ -37,16 +38,38 @@ namespace ConsoleApp1
             HttpListenerResponse response = context.Response;
             response.ContentType = "text/html";
             // Construct a response.
-            string responseString = "<HTML><BODY> Hello world!</BODY></HTML>";
-            byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
+            //string responseString = "<HTML><BODY> Hello world!</BODY></HTML>";
+            //byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
+            byte[] buffer = GetFile("index.html");
             // Get a response stream and write the response to it.
             response.ContentLength64 = buffer.Length;
-            System.IO.Stream output = response.OutputStream;
+            Stream output = response.OutputStream;
             output.Write(buffer, 0, buffer.Length);
             // You must close the output stream.
             output.Close();
             listener.Stop();
             
+        }
+
+        public static byte[] GetFile(string file)
+        {
+            if (!File.Exists(file))
+            {
+                return null;
+            }
+            FileStream readIn = new FileStream(file, FileMode.Open, FileAccess.Read);
+            byte[] buffer = new byte[1024 * 1000];
+            int nRead = readIn.Read(buffer, 0, 10240);
+            int total = 0;
+            while (nRead > 0)
+            {
+                total += nRead;
+                nRead = readIn.Read(buffer, total, 10240);
+            }
+            readIn.Close();
+            byte[] maxresponse_complete = new byte[total];
+            System.Buffer.BlockCopy(buffer, 0, maxresponse_complete, 0, total);
+            return maxresponse_complete;
         }
     }
 }

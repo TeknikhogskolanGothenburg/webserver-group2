@@ -46,6 +46,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Content\document.pdf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\anotherpage.htm" />
+    <Content Include="Content\index.html" />
+    <Content Include="Content\laughing_panda.jpg" />
+    <Content Include="Content\pianocat.gif" />
+    <Content Include="Content\script.js" />
+    <Content Include="Content\style.css" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

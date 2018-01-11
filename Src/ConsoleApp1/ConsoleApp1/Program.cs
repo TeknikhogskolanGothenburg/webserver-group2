@@ -38,7 +38,7 @@ namespace ConsoleApp1
             HttpListenerResponse response = context.Response;
             response.ContentType = "text/html";
             // Construct a response.
-            //string responseString = "<HTML><BODY> Hello world!</BODY></HTML>";
+            //string responseString = "index.html";
             //byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
             byte[] buffer = GetFile("index.html");
             // Get a response stream and write the response to it.

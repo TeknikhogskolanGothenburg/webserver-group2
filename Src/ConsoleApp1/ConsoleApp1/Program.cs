@@ -44,14 +44,21 @@ namespace ConsoleApp1
                 // Construct a response.
                 //string responseString = "<HTML><BODY> Hello world!</BODY></HTML>";
                 //byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
-                byte[] buffer = File.ReadAllBytes("Content/" + request.RawUrl);
-                Directory.GetFiles("Content");
-                // Get a response stream and write the response to it.
-                response.ContentLength64 = buffer.Length;
-                Stream output = response.OutputStream;
-                output.Write(buffer, 0, buffer.Length);
-                // You must close the output stream.
-                output.Close();
+                if (File.Exists("Content/" + request.RawUrl))
+                {
+                    byte[] buffer = File.ReadAllBytes("Content/" + request.RawUrl);
+                    // Get a response stream and write the response to it.
+                    response.ContentLength64 = buffer.Length;
+                    Stream output = response.OutputStream;
+                    output.Write(buffer, 0, buffer.Length);
+                    // You must close the output stream.
+                    output.Close();
+                }
+
+
+
+
+               
             }
             listener.Stop();
 

@@ -41,7 +41,7 @@ namespace ConsoleApp1
             // Construct a response.
             //string responseString = "<HTML><BODY> Hello world!</BODY></HTML>";
             //byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
-            byte[] buffer = GetFile("index.html");
+            byte[] buffer = File.ReadAllBytes("Content/index.html");
             // Get a response stream and write the response to it.
             response.ContentLength64 = buffer.Length;
             Stream output = response.OutputStream;
@@ -49,28 +49,8 @@ namespace ConsoleApp1
             // You must close the output stream.
             output.Close();
             listener.Stop();
-            
+
         }
 
-        public static byte[] GetFile(string file)
-        {
-            if (!File.Exists(file))
-            {
-                return null;
-            }
-            FileStream readIn = new FileStream(file, FileMode.Open, FileAccess.Read);
-            byte[] buffer = new byte[1024 * 1000];
-            int nRead = readIn.Read(buffer, 0, 10240);
-            int total = 0;
-            while (nRead > 0)
-            {
-                total += nRead;
-                nRead = readIn.Read(buffer, total, 10240);
-            }
-            readIn.Close();
-            byte[] maxresponse_complete = new byte[total];
-            System.Buffer.BlockCopy(buffer, 0, maxresponse_complete, 0, total);
-            return maxresponse_complete;
-        }
     }
 }

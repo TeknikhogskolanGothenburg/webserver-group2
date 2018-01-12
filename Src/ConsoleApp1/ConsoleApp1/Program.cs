@@ -36,7 +36,7 @@ namespace ConsoleApp1
                 // Note: The GetContext method blocks while waiting for a request. 
                 HttpListenerContext context = listener.GetContext();
                 HttpListenerRequest request = context.Request;
-
+                
                 // Obtain a response object.
                 HttpListenerResponse response = context.Response;
                 switch (request.RawUrl.Split(new[] { '.' }).Last())
@@ -49,22 +49,42 @@ namespace ConsoleApp1
                     case "gif": response.ContentType = "gif"; break;
                     case "pdf": response.ContentType = "pdf"; break;
 
-                }
-                if (request.RawUrl.EndsWith(".html") || request.RawUrl.EndsWith(".htm"))
-                {
-                    response.ContentType = "text/html";
-                }
-                if (request.RawUrl.EndsWith(".jg") || request.RawUrl.EndsWith(".htm"))
-                {
                     
                 }
                 response.ContentEncoding = System.Text.Encoding.UTF8;
+
+                // Hantera cookies
+                if(request.Cookies["counter"] == null)
+                {
+                    var cookie = new Cookie("counter", "1");
+                    response.Cookies.Add(cookie);
+                }
+                else
+                {
+                    var cookieValue = request.Cookies["counter"].Value;
+                    int counter = Convert.ToInt32(cookieValue);
+                    counter++;
+                    var cookie = new Cookie("counter", counter.ToString());
+                    response.Cookies.Add(cookie); 
+                }
+
                 // Construct a response.
                 //string responseString = "<HTML><BODY> Hello world!</BODY></HTML>";
                 //byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
-                if (File.Exists("Content/" + request.RawUrl))
+
+                if (File.Exists("Content/" + request.RawUrl) || request.RawUrl == "/counter.html")
                 {
-                    byte[] buffer = File.ReadAllBytes("Content/" + request.RawUrl);
+                    byte[] buffer;
+                    if (request.RawUrl == "/counter.html")
+                    {
+                        string responseString = "<HTML><BODY>"+ response.Cookies["counter"].Value +"</BODY></HTML>";
+                        buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
+                    }
+                    else
+                    {
+                        buffer = File.ReadAllBytes("Content/" + request.RawUrl);
+                    }
+                    
                     // Get a response stream and write the response to it.
                     response.ContentLength64 = buffer.Length;
                     Stream output = response.OutputStream;

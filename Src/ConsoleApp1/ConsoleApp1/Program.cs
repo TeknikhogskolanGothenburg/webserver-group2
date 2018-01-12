@@ -72,12 +72,21 @@ namespace ConsoleApp1
                 //string responseString = "<HTML><BODY> Hello world!</BODY></HTML>";
                 //byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
 
-                if (File.Exists("Content/" + request.RawUrl) || request.RawUrl == "/counter.html")
+                if (File.Exists("Content/" + request.RawUrl) || request.RawUrl == "/counter.html" || request.RawUrl.Contains("/dynamic"))
                 {
                     byte[] buffer;
                     if (request.RawUrl == "/counter.html")
                     {
                         string responseString = "<HTML><BODY>"+ response.Cookies["counter"].Value +"</BODY></HTML>";
+                        buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
+                    }
+                    else if (request.RawUrl.Contains("/dynamic.html"))
+                    {
+                        int input1 = Convert.ToInt32(request.QueryString.GetValues("input1").GetValue(0));
+                        int input2 = Convert.ToInt32(request.QueryString.GetValues("input2").GetValue(0));
+                        int sum = input1 + input2;
+
+                        string responseString = "<HTML><BODY>" + sum + "</BODY></HTML>";
                         buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
                     }
                     else

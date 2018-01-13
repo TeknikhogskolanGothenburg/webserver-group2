@@ -36,7 +36,7 @@ namespace ConsoleApp1
                 // Note: The GetContext method blocks while waiting for a request. 
                 HttpListenerContext context = listener.GetContext();
                 HttpListenerRequest request = context.Request;
-                
+
                 // Obtain a response object.
                 HttpListenerResponse response = context.Response;
                 switch (request.RawUrl.Split(new[] { '.' }).Last())
@@ -49,12 +49,12 @@ namespace ConsoleApp1
                     case "gif": response.ContentType = "gif"; break;
                     case "pdf": response.ContentType = "pdf"; break;
 
-                    
+
                 }
                 response.ContentEncoding = System.Text.Encoding.UTF8;
 
                 // Hantera cookies
-                if(request.Cookies["counter"] == null)
+                if (request.Cookies["counter"] == null)
                 {
                     var cookie = new Cookie("counter", "1");
                     response.Cookies.Add(cookie);
@@ -65,7 +65,7 @@ namespace ConsoleApp1
                     int counter = Convert.ToInt32(cookieValue);
                     counter++;
                     var cookie = new Cookie("counter", counter.ToString());
-                    response.Cookies.Add(cookie); 
+                    response.Cookies.Add(cookie);
                 }
 
                 // Construct a response.
@@ -77,7 +77,7 @@ namespace ConsoleApp1
                     byte[] buffer;
                     if (request.RawUrl == "/counter.html")
                     {
-                        string responseString = "<HTML><BODY>"+ response.Cookies["counter"].Value +"</BODY></HTML>";
+                        string responseString = "<HTML><BODY>" + response.Cookies["counter"].Value + "</BODY></HTML>";
                         buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
                     }
                     else if (request.RawUrl.Contains("/dynamic.html"))
@@ -93,7 +93,7 @@ namespace ConsoleApp1
                     {
                         buffer = File.ReadAllBytes("Content/" + request.RawUrl);
                     }
-                    
+
                     // Get a response stream and write the response to it.
                     response.ContentLength64 = buffer.Length;
                     Stream output = response.OutputStream;
@@ -105,7 +105,7 @@ namespace ConsoleApp1
 
 
 
-               
+
             }
             listener.Stop();
 
